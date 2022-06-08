@@ -1,0 +1,69 @@
+title: 'Caso Práctico cigarrillos'
+
+
+```{r, message=FALSE, warning=FALSE, results="hide"}
+check.packages <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg)) 
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+check.packages(c("knitr","ggplot2", "tidyverse", "ggcorrplot", "GGally", "summarytools", "lmtest","MASS"))
+
+
+#explorando el dataset
+
+str(t7_cigarrillos_empleov4)
+
+
+
+DFCIGARRILLOS<-as.data.frame(t7_cigarrillos_empleov4)
+
+names(DFCIGARRILLOS)
+
+#CAMBIAMOS EL NOMBRE A LA COLUMNA 1
+
+
+colnames(DFCIGARRILLOS)[1]<-"Año"
+
+names(DFCIGARRILLOS)
+
+dim(DFCIGARRILLOS)
+
+str(DFCIGARRILLOS)
+
+MCIGARRILLOS<-as.data.frame(DFCIGARRILLOS)
+MCIGARRILLOS<-as.matrix.data.frame(DFCIGARRILLOS)
+
+
+# Remove any non complete cases
+MCIGARRILLOS2<-na.omit(MCIGARRILLOS)
+
+class(MCIGARRILLOS2)
+
+
+#transformamos el dataframe en matriz. Es decir, todos los elementos son del mismo tipo.
+
+matrixcigarrillos<-data.matrix(MCIGARRILLOS2)
+matrixlimpiacig<-na.omit(matrixcigarrillos)
+
+class(matrixcigarrillos)
+is.recursive(matrixcigarrillos)
+is.atomic(matrixcigarrillos)
+
+
+str(matrixcigarrillos)
+attributes(matrixlimpiacig)
+
+mod1<-lm(DFCIGARRILLOS$Logventacigarillos~DFCIGARRILLOS$Logprecio+DFCIGARRILLOS$LogSalario)
+
+
+summary(mod1)
+
+
+
+
+SUMMARY(mod1)
+
+confint(object=mod1,porn="DFcigarrillos",level=0.99)
